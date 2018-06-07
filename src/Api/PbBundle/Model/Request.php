@@ -72,9 +72,7 @@ abstract class Request
         <id>{$this->id}</id>
         <signature>{$this->getSignature()}</signature>
     </merchant>
-    <data>
-        {$this->data()}
-    </data>
+    <data>{$this->data()}</data>
 </request>
 XML;
     }

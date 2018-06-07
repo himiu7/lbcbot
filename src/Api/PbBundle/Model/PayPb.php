@@ -155,15 +155,15 @@ class PayPb extends Request
     protected function data()
     {
         return <<<XML
-    <oper>cmt</oper>
-    <wait>{$this->wait}</wait>
-    <test>{$this->test}</test>
-    <payment id="{$this->payment_id}">
-        <prop name="b_card_or_acc" value="{$this->b_card_or_acc}" />
-        <prop name="amt" value="{$this->amt}" />
-        <prop name="ccy" value="{$this->ccy}" />
-        <prop name="details" value="{$this->details}" />
-    </payment>
+<oper>cmt</oper>
+<wait>{$this->wait}</wait>
+<test>{$this->test}</test>
+<payment id="{$this->payment_id}">
+    <prop name="b_card_or_acc" value="{$this->b_card_or_acc}" />
+    <prop name="amt" value="{$this->amt}" />
+    <prop name="ccy" value="{$this->ccy}" />
+    <prop name="details" value="{$this->details}" />
+</payment>
 XML;
     }
 

@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
 use App\Api\PbBundle\Model\Request as PbRequest;
+use GuzzleHttp\Stream\Stream;
 
 class ApiClient
 {
@@ -30,13 +31,13 @@ class ApiClient
      */
     public function send(PbRequest $request = null)
     {
-        if (!$request) {
-            $model = $this->request;
-        }
+        $model = $request ?? $this->request;
+
         /** @var Request */
+
         $request = $this->client->createRequest('POST', $model->getUrl());
         $request->addHeader('Content-Type', 'text/xml; charset=UTF8');
-        $request->setBody($model->getXml());
+        $request->setBody(Stream::factory($model->getXml()));
         /** @var Response */
         $response = $this->client->send($request);
 

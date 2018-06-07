@@ -29,7 +29,7 @@ class PayPb extends Request
      */
     private $b_card_or_acc;
     /**
-     * @var float Price
+     * @var string Price Decimal e.g.: 20.55
      */
     private $amt;
     /**
@@ -106,7 +106,7 @@ class PayPb extends Request
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getAmt()
     {
@@ -114,7 +114,7 @@ class PayPb extends Request
     }
 
     /**
-     * @param float $amt
+     * @param string $amt
      */
     public function setAmt($amt)
     {

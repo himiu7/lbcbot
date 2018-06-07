@@ -40,7 +40,7 @@ class PbController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $client = new ApiClient();
 
-            $model->setTest(1);
+            //$model->setTest(1);
             $result = $client->send($model);
         }
 

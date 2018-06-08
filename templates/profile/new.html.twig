@@ -3,9 +3,16 @@
 {% block title %}New Profile{% endblock %}
 
 {% block body %}
-    <h1>Create new Profile</h1>
+    <div class="container">
+        <div class="blog-header">
+            <h2 class="blog-title">Новый Профайл</h2>
+        </div>
 
-    {{ include('profile/_form.html.twig') }}
-
-    <a href="{{ path('profile_index') }}">back to list</a>
+        <div class="row">
+            {{ include('_alert.html.twig') }}
+            <div class="col-sm-12 blog-main">
+                {{ include('profile/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

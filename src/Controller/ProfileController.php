@@ -35,14 +35,15 @@ class ProfileController extends Controller
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
-        //var_dump($this->getUser());
-
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $profile->setUser($this->getUser());
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($profile);
             $em->flush();
 
-            return $this->redirectToRoute('profile_index');
+            return $this->redirectToRoute('profile_');
         }
 
         return $this->render('profile/new.html.twig', [

@@ -26,7 +26,7 @@ class ProfileType extends AbstractType
                 ]
             )
             ->add(
-                'title',
+                'key',
                 TextType::class,
                 [
                     'constraints' => [new NotBlank(), new Length(32)],

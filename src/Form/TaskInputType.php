@@ -97,7 +97,7 @@ class TaskInputType extends AbstractType
                             'choice_value' => 'ad_id',
                             'choice_label' => function (UserAd $ad) {
                                 return implode(',', [
-                                    $ad->getId(),
+                                    $ad->getAdId(),
                                     $ad->getTradeType(),
                                     $ad->getCountrycode(),
                                     $ad->getCurrency(),

@@ -38,15 +38,16 @@ $(document).ready(function(){
         $('#btnUpdateAds').click(function(){
             userAds.html('Updating...');
 
-            $(this).preventDefault();
+            console.log($(this).attr('dataUrl'));
 
             $.get({
-                url: $(this).attr('href'),
+                url: $(this).attr('dataUrl'),
                 success: function(data) {
                     $('.last-ads-update').html((new Date()).toDateString());
                     userAds.html(data);
                 }
-            })
+            });
+
             return false;
         });
     }

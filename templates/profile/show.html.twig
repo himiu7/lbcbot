@@ -39,7 +39,7 @@
                 <div class="col-sm-12 center-block text-center">
                     <a class="btn btn-primary" href="{{  path('profile_index') }}">back to list</a>
                     <a class="btn btn-primary" href="{{ path('profile_edit', {'id': profile.id}) }}">edit</a>
-                    <a class="btn btn-default" id="btnUpdateAds" href="{{ path('profile_update_ads', {'id': profile.id}) }}">update ads</a>
+                    <a class="btn btn-default" id="btnUpdateAds" href="#userAds" dataUrl="{{ path('profile_update_ads', {'id': profile.id}) }}">update ads</a>
                 </div>
             </div>
         </div>
@@ -53,6 +53,7 @@
     </div>
 </div>
 <div class="row">
+    <a name="userAds"></a>
     <div class="col-sm-12" id="listUserAds">
         {% include 'profile/_ads-list.html.twig' with {'ads': ads} %}
     </div>

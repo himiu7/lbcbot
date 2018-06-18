@@ -1,0 +1,35 @@
+<div class="blog-post-title">Объявления</div>
+<div class="col-sm-12 blog-main">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Цена USD</th>
+                <th>Уравнение</th>
+                <th>Страна</th>
+                <th>Валюта</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ad in ads %}
+            <tr>
+                <td>{{ ad.adId }}</td>
+                <td>{{ ad.tradeType|e }}</td>
+                <td>{{ "$%.2f"|format(ad.tempPriceUsd) }}</td>
+                <td>{{ ad.priceEquation|e }}</td>
+                <td>{{ ad.countrycode|e }}</td>
+                <td>{{ ad.currency|e }}</td>
+                <td>
+                    <a href="{{ path('create_task_ad', {'profile_id': profile.id, 'ad_id': ad.adId}) }}"><i class="glyphicon glyphicon-off"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Ничего найдено</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

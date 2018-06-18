@@ -17,6 +17,10 @@ $(document).ready(function(){
         }
     });
 
+    $('.btn-submit').click(function(){
+       return $(this).parents().find('form').submit();
+    });
+
 });
 
 require('../css/main.scss');

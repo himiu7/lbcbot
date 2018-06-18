@@ -2,11 +2,18 @@
 
 namespace App\Controller;
 
+use App\Document\Task;
 use App\Entity\Profile;
 use App\Form\ProfileType;
+use App\Form\TaskInputType;
+use App\Model\TaskInput;
+use App\Service\TaskManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -14,6 +21,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProfileController extends Controller
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+    /**
+     * @var TaskManager
+     */
+    private $tm;
+    /**
+     * ProfileController constructor.
+     * @param EntityManagerInterface $em
+     * @param TaskManager $tm
+     */
+    public function __construct(EntityManagerInterface $em, TaskManager $tm)
+    {
+        $this->em = $em;
+        $this->tm = $tm;
+    }
+
     /**
      * @Route("/", name="profile_index", methods="GET")
      */
@@ -37,13 +63,17 @@ class ProfileController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $profile->setCreatedAt(new \DateTime());
+
             $profile->setUser($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($profile);
             $em->flush();
 
-            return $this->redirectToRoute('profile_');
+            return $this->redirectToRoute('profile_show', [
+                'id' => $profile->getId()
+            ]);
         }
 
         return $this->render('profile/new.html.twig', [
@@ -55,9 +85,16 @@ class ProfileController extends Controller
     /**
      * @Route("/{id}", name="profile_show", methods="GET")
      */
-    public function show(Profile $profile): Response
+    public function show(Profile $profile, TaskInput $task): Response
     {
-        return $this->render('profile/show.html.twig', ['profile' => $profile]);
+        $form = $this->createForm(TaskInputType::class, $task);
+
+        return $this->render('profile/show.html.twig', [
+            'profile' => $profile,
+            'task' => $task,
+            'form' => $form->createView(),
+            'ads' => print_r($this->tm->getUserAds($profile), true)
+        ]);
     }
 
     /**
@@ -78,6 +115,23 @@ class ProfileController extends Controller
             'profile' => $profile,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}/update-ads", name="profile_update_ads", methods="GET")
+     */
+    public function updateAds(Request $request): Response
+    {
+        if ($profileId = $request->get('id')) {
+            $profile = $this->em->getRepository(Profile::class)->find($profileId);
+
+            return $this->render('profile\_ads-list.html.twig', [
+                    'ads' => $this->tm->getUserAds($profile),
+                    'profile' => $profile
+                ]);
+        }
+
+        throw new BadRequestHttpException('Request not allowed');
     }
 
     /**

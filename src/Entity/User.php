@@ -21,25 +21,10 @@ class User extends BaseUser
      */
     protected $id;
 
-    /**
-     * @var Profile[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Profile", mappedBy="user",  cascade={"persist", "remove"})
-     */
-    protected $profiles;
-
     public function __construct()
     {
         parent::__construct();
 
-        $this->profiles = new ArrayCollection();
     }
 
-    /**
-     * @return Collection|Profile[]
-     */
-    public function getProfiles(): Collection
-    {
-        return $this->profiles;
-    }
 }

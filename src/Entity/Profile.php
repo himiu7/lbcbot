@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Profile
  *
- * @ORM\Table(name="profile", indexes={@ORM\Index(name="user_id", columns={"user_id"})})
+ * @ORM\Table(name="`profile`", indexes={@ORM\Index(name="user_id", columns={"user_id"})})
  * @ORM\Entity
  */
 class Profile
@@ -23,6 +23,12 @@ class Profile
 
     /**
      * @var string
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="login", type="string", length=80, nullable=false)
      */
@@ -31,7 +37,7 @@ class Profile
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=32, nullable=false)
+     * @ORM\Column(name="`key`", type="string", length=32, nullable=false)
      */
     private $key;
 
@@ -47,7 +53,7 @@ class Profile
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $createdAt = 'CURRENT_TIMESTAMP';
+    private $createdAt;
 
     /**
      * @var \DateTime
@@ -128,6 +134,24 @@ class Profile
     {
         $this->user = $user;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     * @return Profile
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
         return $this;
     }
 

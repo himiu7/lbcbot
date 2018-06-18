@@ -9,23 +9,12 @@
     {% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-static-top">
-        <div id="navbar" class="collapse navbar-collapse pull-right">
-            <ul class="nav navbar-nav">
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                    <li><a href="{{ path("dashboard") }}">Главная</a></li>
-                    <li><a href="{{ path("profile_index") }}">Профайлы</a></li>
-                    <li><a href="{{ path("pb_pay_pb") }}">ПриватБанк</a></li>
-                    <li>
-                        <a href="{{ path('fos_user_security_logout') }}">Выйти</a>
-                    </li>
-                {% else %}
-                    <li class="active"><a href="{{ path('fos_user_security_login') }}">Войти</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-{% block body %}{% endblock %}
+{% include '_navbar.html.twig' %}
+
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
+
 {% block javascripts %}
     <script src="{{ asset('build/app.js') }}"></script>
 {% endblock %}

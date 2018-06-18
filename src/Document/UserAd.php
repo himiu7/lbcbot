@@ -8,7 +8,7 @@
 
 namespace App\Document;
 
-use App\LbcBundle\Document\Ad;
+use App\Document\Ad;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -18,6 +18,10 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class UserAd extends Ad
 {
+    /**
+     * @MongoDB\Id()
+     */
+    protected $id;
     /**
      * @MongoDB\Field(type="int")
      */
@@ -37,5 +41,104 @@ class UserAd extends Ad
     /**
      * @MongoDB\EmbedOne()
      */
-    protected $account_details;   //: { payment method specific fields }
+    protected $account_details;    //: { payment method specific fields }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     * @return Ad
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfileId()
+    {
+        return $this->profile_id;
+    }
+
+    /**
+     * @param mixed $profile_id
+     */
+    public function setProfileId($profile_id)
+    {
+        $this->profile_id = $profile_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPriceEquation()
+    {
+        return $this->price_equation;
+    }
+
+    /**
+     * @param mixed $price_equation
+     */
+    public function setPriceEquation($price_equation)
+    {
+        $this->price_equation = $price_equation;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpeningHours()
+    {
+        return $this->opening_hours;
+    }
+
+    /**
+     * @param mixed $opening_hours
+     */
+    public function setOpeningHours($opening_hours)
+    {
+        $this->opening_hours = $opening_hours;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountInfo()
+    {
+        return $this->account_info;
+    }
+
+    /**
+     * @param mixed $account_info
+     */
+    public function setAccountInfo($account_info)
+    {
+        $this->account_info = $account_info;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountDetails()
+    {
+        return $this->account_details;
+    }
+
+    /**
+     * @param mixed $account_details
+     */
+    public function setAccountDetails($account_details)
+    {
+        $this->account_details = $account_details;
+    }
+
 }

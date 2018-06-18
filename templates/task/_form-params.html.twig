@@ -1,0 +1,8 @@
+{{ form_label(form.params) }}
+<div class="form-group col-md-12" style="margin-left: 20px">
+{% for param in form.params %}
+    <div class="form-group col-md-6">
+        {{ form_row(param) }}
+    </div>
+{% endfor %}
+</div>

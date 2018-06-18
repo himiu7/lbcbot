@@ -28,45 +28,40 @@ return [
             "summary"=> "Return the information of the current user",
             "responseModel"=> "GenericOutput"
         ],
-        "chartAverage"=> [
+        "myAds"=> [
             "httpMethod"=> "GET",
-            "uri"=> "/bitcoinaverage/ticker-all-currencies/",
-            "summary"=> "Returns a ticker-tape like list of all completed trades.",
-            "responseModel"=> "GenericOutput"
-        ],
-        "chartTrades"=> [
-            "httpMethod"=> "GET",
-            "uri"=> "/bitcoincharts/{currency}/trades.json",
-            "summary"=> "All closed trades in online buy and online sell categories, updated every 15 minutes.",
+            "uri"=> "/api/ads/",
+            "summary"=> "This API returns buy Authenticated user ads",
             "responseModel"=> "GenericOutput",
             "parameters"=> [
-                "currency"=> [
-                    "location"=> "uri",
-                    "required"=> true,
-                    "default"=> "UAH"
-                ],
-                "since"=> [
+                "visible" => [
                     "location"=> "query",
-                    "required"=>false
+                    "required"=> false
+                ] , //	Boolean	0 for false, 1 for true.
+                "trade_type" => [
+                    "location"=> "query",
+                    "required"=> false
+                ],  //	String	One of LOCAL_SELL, LOCAL_BUY, ONLINE_SELL, ONLINE_BUY
+                
+                "currency" => [
+                    "location"=> "query",
+                    "required"=> false
+                ], //	String	Three letter currency code. See list of valid currencies
+                "countrycode" => [
+                    "location"=> "query",
+                    "required"=> false
+                ], //	String	Two letter country code. See valid country codes
+                "id__gt"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ],
+                "fields"=> [
+                    "location"=> "query",
+                    "required"=> false
                 ]
             ]
         ],
-        "chartOrders"=> [
-            "httpMethod"=> "GET",
-            "uri"=> "/bitcoincharts/{currency}/orderbook.json",
-            "summary"=> "Buy and sell bitcoin online advertisements. Amount is the maximum amount available for the
-                        trade request. Price is the hourly updated price. The price is based on the price equation and
-                        commission % entered by the ad author.",
-            "responseModel"=> "GenericOutput",
-            "parameters"=> [
-                "currency"=> [
-                    "location"=> "uri",
-                    "required"=> true,
-                    "default"=> "UAH"
-                ]
-            ]
-        ],
-
+        
         "onlineBuy"=> [
             "httpMethod"=> "GET",
             "uri"=> "/buy-bitcoins-online/.json",
@@ -74,6 +69,10 @@ return [
             "responseModel"=> "GenericOutput",
             "parameters"=> [
                 "page"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ],
+                "fields"=> [
                     "location"=> "query",
                     "required"=> false
                 ]
@@ -98,6 +97,14 @@ return [
                 "payment_method" => [
                     "location"=> "uri",
                     "required"=> false,
+                ],
+                "page"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ],
+                "fields"=> [
+                    "location"=> "query",
+                    "required"=> false
                 ]
             ]
         ],
@@ -115,6 +122,14 @@ return [
                 "payment_method" => [
                     "location"=> "uri",
                     "required"=> false
+                ],
+                "page"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ],
+                "fields"=> [
+                    "location"=> "query",
+                    "required"=> false
                 ]
             ]
         ],
@@ -128,6 +143,10 @@ return [
                     "location"=> "query",
                     "required"=> false
                 ],
+                "fields"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ]
             ]
         ],
         "onlineSellCountry"=> [
@@ -149,6 +168,14 @@ return [
                 "payment_method" => [
                     "location"=> "uri",
                     "required"=> false,
+                ],
+                 "page"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ],
+                "fields"=> [
+                    "location"=> "query",
+                    "required"=> false
                 ]
             ]
         ],
@@ -166,6 +193,14 @@ return [
                 "payment_method" => [
                     "location"=> "uri",
                     "required"=> false,
+                ],
+                "page"=> [
+                    "location"=> "query",
+                    "required"=> false
+                ],
+                "fields"=> [
+                    "location"=> "query",
+                    "required"=> false
                 ]
             ]
         ],
@@ -271,6 +306,44 @@ return [
                 "price_equation"=> [
                     "location"=> "postField",
                     // String	Price equation formula
+                ]
+            ]
+        ],
+        "chartAverage"=> [
+            "httpMethod"=> "GET",
+            "uri"=> "/bitcoinaverage/ticker-all-currencies/",
+            "summary"=> "Returns a ticker-tape like list of all completed trades.",
+            "responseModel"=> "GenericOutput"
+        ],
+        "chartTrades"=> [
+            "httpMethod"=> "GET",
+            "uri"=> "/bitcoincharts/{currency}/trades.json",
+            "summary"=> "All closed trades in online buy and online sell categories, updated every 15 minutes.",
+            "responseModel"=> "GenericOutput",
+            "parameters"=> [
+                "currency"=> [
+                    "location"=> "uri",
+                    "required"=> true,
+                    "default"=> "UAH"
+                ],
+                "since"=> [
+                    "location"=> "query",
+                    "required"=>false
+                ]
+            ]
+        ],
+        "chartOrders"=> [
+            "httpMethod"=> "GET",
+            "uri"=> "/bitcoincharts/{currency}/orderbook.json",
+            "summary"=> "Buy and sell bitcoin online advertisements. Amount is the maximum amount available for the
+                        trade request. Price is the hourly updated price. The price is based on the price equation and
+                        commission % entered by the ad author.",
+            "responseModel"=> "GenericOutput",
+            "parameters"=> [
+                "currency"=> [
+                    "location"=> "uri",
+                    "required"=> true,
+                    "default"=> "UAH"
                 ]
             ]
         ]

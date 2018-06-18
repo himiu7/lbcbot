@@ -1,0 +1,38 @@
+{{ form_start(form, {
+    'action': path('create_task', {
+        'profile_id':profile.id}
+    )
+}) }}
+{{ form_widget(form.profile_id, {
+    'value':profile.id
+}) }}
+{% if short is defined and short %}
+    <div class="col-md-12">
+        <div class="form-group col-md-8">
+            {{ form_widget(form.command) }}
+        </div>
+        <div class="form-group col-md-4">
+            <button class="form-control btn-primary pull-right" id="btnCreateTask" type="button">Создать таск</button>
+        </div>
+    </div>
+{% else %}
+    <div class="col-md-12">
+        <div class="form-group col-md-8">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="form-group col-md-4">
+            {{ form_row(form.interval) }}
+        </div>
+        <div class="form-group col-md-6">
+            {{ form_row(form.command) }}
+        </div>
+        <div class="form-group col-md-6">
+            {{ form_row(form.ad_id) }}
+        </div>
+        <div class="form-group col-md-12" id="taskParams">
+            {% include 'task/_form-params.html.twig' %}
+        </div>
+    </div>
+    {% include '_form-actions.html.twig' %}
+{% endif %}
+{{ form_end(form, {'render_rest': false}) }}

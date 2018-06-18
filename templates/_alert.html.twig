@@ -1,10 +1,20 @@
-<div class="col-md-12 col-lg-12 col-xl-12">
+{% if type is defined and type == "form" %}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="alert alert-{{ label }}" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <div class="bg-{{ label }}">
                 {{ message }}
             </div>
         {% endfor %}
     {% endfor %}
-</div>
+{% else %}
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}

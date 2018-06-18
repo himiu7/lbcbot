@@ -17,6 +17,15 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add(
+                'title',
+                TextType::class,
+                [
+                    'constraints' => [new NotBlank()],
+                    'attr' => ['class' => 'form-control'],
+                    'label' => 'Название'
+                ]
+            )
+            ->add(
                 'login',
                 TextType::class,
                 [
@@ -43,14 +52,6 @@ class ProfileType extends AbstractType
                     'label' => 'Секрет'
                 ]
             )
-            ->add(
-                'submit',
-                SubmitType::class,
-                [
-                    'attr' => ['class' => 'form-control btn-primary pull-right'],
-                    'label' => 'Сохранить'
-                ]
-            );
         ;
     }
 

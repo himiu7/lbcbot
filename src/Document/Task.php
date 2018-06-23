@@ -273,6 +273,7 @@ class Task
         $statuses = [
             self::STATUS_NEW => 'New',
             self::STATUS_ACTIVE => 'Active',
+            self::STATUS_WAIT => 'Wait',
             self::STATUS_PAUSE => 'Pause',
             self::STATUS_ERROR => 'Error'
         ];

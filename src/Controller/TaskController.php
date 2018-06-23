@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Document\AdTradeResult;
 use App\Document\Task;
+use App\Entity\AlgorithmParam;
 use App\Form\TaskInputType;
 use App\Model\TaskInput;
 use App\Service\TaskManager;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,18 +23,24 @@ class TaskController extends Controller
      * @var TaskManager
      */
     private $tm;
+    /**
+     * @var DocumentManager
+     */
+    private $dm;
 
     /**
      * TaskController constructor.
      * @param TaskManager $tm
+     * @param DocumentManager $dm
      */
-    public function __construct(TaskManager $tm)
+    public function __construct(TaskManager $tm, DocumentManager $dm)
     {
         $this->tm = $tm;
+        $this->dm = $dm;
     }
 
     /**
-     * @Route("/", name="task_index", methods="GET")
+     * @Route("/{profile_id}", name="task_index", methods="GET", requirements={"profile_id"="\d+"})
      */
     public function index(): Response
     {
@@ -41,13 +50,54 @@ class TaskController extends Controller
 
         return $this->render('task/index.html.twig', ['profiles' => $profiles]);*/
     }
+    /**
+     * @Route("/{id}/results", name="task_results", methods="GET")
+     */
+    public function results(): Response
+    {
+        /*$profiles = $this->getDoctrine()
+            ->getRepository(Task::class)
+            ->findAll();
 
+        return $this->render('task/index.html.twig', ['profiles' => $profiles]);*/
+    }
+    /**
+     * @Route("/{id}/status", name="task_status", methods="POST")
+     */
+    public function status(): Response
+    {
+        // TODO: Start / Stop Task
+        /*$profiles = $this->getDoctrine()
+            ->getRepository(Task::class)
+            ->findAll();
+
+        return $this->render('task/index.html.twig', ['profiles' => $profiles]);*/
+    }
     /**
      * @Route("/{id}", name="task_show", methods="GET")
      */
-    public function show(TaskInput $task): Response
+    public function show(Request $request, TaskInput $task): Response
     {
-        return $this->render('task/show.html.twig', ['task' => $task]);
+        /** @var Task $doc */
+        $doc = $this->dm->getRepository(Task::class)
+            ->find($request->get('id'));
+
+        $task->setAttrs($doc->getAttrs());
+
+        $params = [];
+        /** @var AlgorithmParam $param */
+        foreach ($task->getAlgorithm()->getParams() as $param) {
+            $params[] = [
+                'label' => sprintf("%s [%s]", $param->getTitle(), $param->getName()),
+                'value' => $task->getParams()->getAttrs($param->getName())
+            ];
+        }
+
+        return $this->render('task/show.html.twig', [
+            'task' => $task,
+            'params' => $params,
+            'results' => $task->getResults()
+        ]);
     }
 
     /**
@@ -87,7 +137,7 @@ class TaskController extends Controller
      */
     public function newAd(Request $request, TaskInput $task): Response
     {
-        $task->setAdId($request->get('ad_id'));
+        $task->setAd($request->get('ad_id'));
 
         return $this->new($request, $task);
     }
@@ -123,9 +173,18 @@ class TaskController extends Controller
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->tm->createTask($task);
+            $params = $request->get($form->getName())['params'];
+            $params['ad_id'] = $task->getAd()->getAdId();
+            $task->setParams($params);
 
-            return $this->redirectToRoute('task_show', ['id' => $task->getProfileId()]);
+            try {
+                $task = $this->tm->createTask($task);
+
+                return $this->redirectToRoute('task_show', ['id' => $task->getId()]);
+
+            } catch (\Exception $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
         }
 
         return $this->render('task/new.html.twig', [

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task{% endblock %}
+
+{% block body %}
+<div class="blog-header">
+    <h1 class="blog-title">Таск #{{ task.id[:5] }}...</h1>
+    <p class="lead blog-description">{{ task.title | e }}</p>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 blog-main">
+        <div class="blog-post">
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>Профайл</th>
+                    <td>{{ task.profile.title|e }}</td>
+                </tr>
+                <tr>
+                    <th>Команда</th>
+                    <td>{{ task.command|e }}</td>
+                </tr>
+                <tr>
+                    <th><a name="taskStatus">Статус</th>
+                    <td id="taskStatus">{{ task.statusTxt(task.status)|e }}</td>
+                </tr>
+                <tr>
+                    <th>Последний запуск</th>
+                    <td class="last-update" id="lastStart">{{ task.lastStart ? task.lastStart|date('Y-m-d H:i:s') : ' - ' }}</td>
+                </tr>
+                <tr>
+                    <th>Алгоритм</th>
+                    <td>{{ task.algorithm.description|e }}</td>
+                </tr>
+                {% for param in params %}
+                    <tr>
+                        <th><i>{{ param.label|e }}</i></th>
+                        <td>{{ param.value|e}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-sm-12 center-block text-center">
+                    <a class="btn btn-primary" href="{{  path('task_index', {'profile_id':task.profile.id}) }}">Список задач</a>
+                    <a class="btn btn-default" id="btnTaskResults" href="#taskResults" dataUrl="{{ path('task_results', {'id': task.id}) }}">Обновить результаты</a>
+                    <a class="btn btn-danger" id="btnTaskStatus" href="#taskStatus" dataUrl="{{ path('task_status', {'id': task.id}) }}">Запустить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <a name="userAds"></a>
+    <div class="col-sm-12" id="listUserAds">
+        {% include 'task/_results.html.twig' with {'results': results } %}
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/task.js') }}"></script>
+{% endblock %}

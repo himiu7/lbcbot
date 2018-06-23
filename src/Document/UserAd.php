@@ -41,7 +41,7 @@ class UserAd extends Ad
     /**
      * @MongoDB\EmbedOne()
      */
-    protected $account_details;    //: { payment method specific fields }
+    protected $account_details; //: { payment method specific fields }
 
     /**
      * @return mixed
@@ -53,7 +53,7 @@ class UserAd extends Ad
 
     /**
      * @param mixed $id
-     * @return Ad
+     * @return UserAd
      */
     public function setId($id)
     {
@@ -71,10 +71,12 @@ class UserAd extends Ad
 
     /**
      * @param mixed $profile_id
+     * @return UserAd
      */
     public function setProfileId($profile_id)
     {
         $this->profile_id = $profile_id;
+        return $this;
     }
 
     /**
@@ -87,10 +89,12 @@ class UserAd extends Ad
 
     /**
      * @param mixed $price_equation
+     * @return UserAd
      */
     public function setPriceEquation($price_equation)
     {
         $this->price_equation = $price_equation;
+        return $this;
     }
 
     /**
@@ -103,10 +107,12 @@ class UserAd extends Ad
 
     /**
      * @param mixed $opening_hours
+     * @return UserAd
      */
     public function setOpeningHours($opening_hours)
     {
         $this->opening_hours = $opening_hours;
+        return $this;
     }
 
     /**
@@ -119,10 +125,12 @@ class UserAd extends Ad
 
     /**
      * @param mixed $account_info
+     * @return UserAd
      */
     public function setAccountInfo($account_info)
     {
         $this->account_info = $account_info;
+        return $this;
     }
 
     /**
@@ -135,10 +143,11 @@ class UserAd extends Ad
 
     /**
      * @param mixed $account_details
+     * @return UserAd
      */
     public function setAccountDetails($account_details)
     {
         $this->account_details = $account_details;
+        return $this;
     }
-
 }

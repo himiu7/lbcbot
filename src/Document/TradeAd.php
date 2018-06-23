@@ -26,6 +26,7 @@ class TradeAd implements AttrsInterface
     /**
      * @var int
      * @MongoDB\Field(type="int")
+     * @MongoDB\Index()
      */
     protected $ad_id; //: primary key of the ad,
     /**
@@ -43,6 +44,22 @@ class TradeAd implements AttrsInterface
      * @MongoDB\Field(type="string")
      */
     protected $temp_price; //: current price,
+    /**
+     * @var float
+     * @MongoDB\Field(type="string")
+     */
+    protected $min_amount; //: string repr of a decimal or null,
+    /**
+     * @var float
+     * @MongoDB\Field(type="string")
+     */
+    protected $max_amount; //: string repr of a decimal or null,
+    /**
+     * @var float
+     * @MongoDB\Field(type="string")
+     */
+    protected $max_amount_available; //: string repr of a decimal or null,
+
     /**
      * @var Profile
      * @MongoDB\EmbedOne(targetDocument="Profile")
@@ -136,6 +153,60 @@ class TradeAd implements AttrsInterface
     public function setProfile($profile)
     {
         $this->profile = $profile;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinAmount()
+    {
+        return $this->min_amount;
+    }
+
+    /**
+     * @param float $min_amount
+     * @return TradeAd
+     */
+    public function setMinAmount($min_amount)
+    {
+        $this->min_amount = $min_amount;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxAmount()
+    {
+        return $this->max_amount;
+    }
+
+    /**
+     * @param float $max_amount
+     * @return TradeAd
+     */
+    public function setMaxAmount($max_amount)
+    {
+        $this->max_amount = $max_amount;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxAmountAvailable()
+    {
+        return $this->max_amount_available;
+    }
+
+    /**
+     * @param float $max_amount_available
+     * @return TradeAd
+     */
+    public function setMaxAmountAvailable($max_amount_available)
+    {
+        $this->max_amount_available = $max_amount_available;
         return $this;
     }
 }

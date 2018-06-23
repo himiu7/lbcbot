@@ -1,0 +1,65 @@
+<div class="blog-post-title">Конкуренты</div>
+<div class="col-sm-12 blog-main">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Позиция</th>
+                <th>Цена</th>
+                <th>Изменение</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ad in results %}
+            <tr>
+                <td>{{ ad.createdAt ? ad.createdAt|date('Y-m-d H:i:s') : ' - ' }}</td>
+                <td>{{ ad.status|default('Ок')}}</td>
+                <td>{{ ad.position|e}}</td>
+                <td>{{ "%.2f"|format(ad.tmpPrice) }}</td>
+                <td>{{ "%.2f"|format(ad.change)}}</td>
+                <td>
+                    <a href="javascript:;" id="btnResultRivals_{{ ad.id }}" class="btn-result-rivals"><i class="glyphicon glyphicon-search"></i></a>
+                </td>
+            </tr>
+            <tr id="divResultRivals_{{ ad.id }}" style="display: none">
+                <td colspan="6" style="padding-left: 50px;">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Юзер</th>
+                            <th>Цена</th>
+                            <th>Валюта</th>
+                            <th colspan="2">Количество</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for riv in ad.rivals %}
+                            <tr>
+                                <td>{{ riv.adId }}</td>
+                                <td>{{ riv.profile.username|e }}</td>
+                                <td>{{ "%.2f"|format(riv.tempPrice) }}</td>
+                                <td>{{ riv.currency|e }}</td>
+                                <td>{{ riv.minAmount|e }}</td>
+                                <td>{{ riv.maxAmount|e }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">Ничего найдено</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+        {% else %}
+            <tr >
+                <td colspan="6">Ничего найдено</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

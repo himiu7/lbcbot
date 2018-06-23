@@ -9,32 +9,33 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class LbcListCommand extends Command
+class LbcListCommand extends LbcTaskCommand
 {
     protected static $defaultName = 'lbc:list';
 
     protected function configure()
     {
         $this
-            ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->setDescription('Updates Market`s and User`s Ads')
+            ->addArgument('type', InputArgument::REQUIRED, 'List type: `sell`|`user`|`buy`')
+            ->addArgument('filter', InputArgument::OPTIONAL, "Country code [cc:`ru`,`ua`, ...']\nCurrency [cur:`usd`, `uah`, ...']")
+            ->addOption('secs', 's', InputOption::VALUE_REQUIRED, 'Delay in seconds after last update')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        $type = $input->getArgument('type');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        if (!$type) {
+            $io->note(sprintf('You passed an argument: %s', $type));
         }
 
-        if ($input->getOption('option1')) {
-            // ...
-        }
+        $secs = $input->getOption('secs') ?? 15;
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        dump([$type, $secs]);
+
+        $io->success('Ok');
     }
 }

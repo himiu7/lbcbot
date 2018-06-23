@@ -1,3 +1,4 @@
+{% if form.params is defined %}
 {{ form_label(form.params) }}
 <div class="form-group col-md-12" style="margin-left: 20px">
 {% for param in form.params %}
@@ -6,3 +7,4 @@
     </div>
 {% endfor %}
 </div>
+{% endif %}

@@ -11,8 +11,27 @@ use GuzzleHttp\Command\Guzzle\Description;
 /**
  * Class ApiClient
  * @package App\Api\LbcBundle
- * @method onlineSell()
  *
+ * Commands annotations : getCommands -> get Params
+ *
+ * @method accountInfo(array)
+ * @method myself(array)
+ * @method myAds(array)
+ *
+ * @method onlineBuy(array)
+ * @method onlineBuyCountry(array)
+ * @method onlineBuyCurrency(array)
+ *
+ * @method onlineSell(array)
+ * @method onlineSellCountry(array)
+ * @method onlineSellCurrency(array)
+ *
+ * @method adUpdate(array)
+ * @method adUpdateEquation(array)
+ *
+ * @method chartAverage(array)
+ * @method chartTrades(array)
+ * @method chartOrders(array)
  */
 class ApiClient extends GuzzleClient
 {

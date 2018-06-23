@@ -21,7 +21,7 @@ class AdBuyInput extends AdTradeInput
      * @var float
      * @MongoDB\Field(type="string")
      */
-    private $max_price_limit;
+    protected $max_price_limit;
 
     /**
      * @return float
@@ -33,9 +33,9 @@ class AdBuyInput extends AdTradeInput
 
     /**
      * @param float $max_price_limit
-     * @return AdSellInput
+     * @return AdBuyInput
      */
-    public function setMinPriceLimit($max_price_limit)
+    public function setMaxPriceLimit($max_price_limit)
     {
         $this->max_price_limit = $max_price_limit;
         return $this;

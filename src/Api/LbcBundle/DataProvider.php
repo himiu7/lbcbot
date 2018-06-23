@@ -9,6 +9,7 @@
 namespace App\Api\LbcBundle;
 
 use App\Api\LbcBundle\ApiClient;
+use App\Document\Trade;
 use App\Entity\AttrsInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use GuzzleHttp\Command\Guzzle\Operation;
@@ -71,6 +72,7 @@ class DataProvider
     public function getData(array $params=[])
     {
         $_params = [];
+        $this->pagination = null;
 
         if (!empty($params['page'])) {
             $_params['page'] = $params['page'];
@@ -90,10 +92,10 @@ class DataProvider
         $client = null;
 
         switch ($this->type) {
-            case 'sell':
-            case 'buy':
+            case Trade::TRADE_SELL:
+            case Trade::TRADE_BUY:
 
-                $cmd = $this->type == 'buy' ? 'onlineBuy' : 'onlineSell';
+                $cmd = $this->type == Trade::TRADE_BUY ? 'onlineBuy' : 'onlineSell';
 
                 if (!empty($params['currency'])) {
                     $cmd .= 'Currency';
@@ -110,7 +112,7 @@ class DataProvider
                 $client = ApiClient::factory();
                 break;
 
-            case 'user':
+            case Trade::TRADE_USER:
                 $cmd = 'myAds';
 
                 if (empty($params['key']) || empty($params['secret'])) {
@@ -146,7 +148,18 @@ class DataProvider
                     $model->setAttrs($ad['data'], $this->embedClass);
                     $this->data->add($model);
                 }
-
+                
+                if (!empty($res['pagination'])) {
+                    
+                    $this->pagination = new Pagination();
+                    
+                    if (!empty($res['pagination']['next'])) {
+                        $this->pagination->setNext($res['pagination']['next']);
+                    }
+                    if (!empty($res['pagination']['prev'])) {
+                        $this->pagination->setNext($res['pagination']['prev']);
+                    }
+                }
                 return $this->data;
             }
         }
@@ -169,6 +182,17 @@ class Pagination
      */
     protected $prev;
 
+    private function fromUrl($url)
+    {
+        if (preg_match('#^[^\?]+\?(.*)page=(\d+)#i', $url, $parts)) {
+            
+            if (!empty($parts[2])) {
+                return $parts[2];
+            }
+        }
+        
+        return false;
+    }
     /**
      * @return string
      */
@@ -183,7 +207,8 @@ class Pagination
      */
     public function setNext($next)
     {
-        $this->next = $next;
+        $this->next = $this->fromUrl($next) ?? $next;
+        
         return $this;
     }
 
@@ -201,7 +226,8 @@ class Pagination
      */
     public function setPrev($prev)
     {
-        $this->prev = $prev;
+        $this->prev = $this->fromUrl($prev) ?? $prev;
+        
         return $this;
     }
 }

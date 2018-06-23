@@ -9,6 +9,7 @@
 namespace App\Model;
 
 use App\Document\Task;
+use App\Document\UserAd;
 use App\Entity\Algorithm;
 use App\Entity\Profile;
 use App\Service\TaskManager;
@@ -29,9 +30,9 @@ class TaskInput extends Task
      */
     private $profile;
     /**
-     * @var integer
+     * @var UserAd
      */
-    private $ad_id;
+    private $ad;
     /**
      * @var EntityManagerInterface
      */
@@ -47,7 +48,7 @@ class TaskInput extends Task
      */
     public function getAlgorithm()
     {
-        if (!$this->algorithm) {
+        if (!$this->algorithm && $this->command) {
             $this->algorithm = $this->tm->getAlgorithm($this->command);
         }
 
@@ -66,6 +67,22 @@ class TaskInput extends Task
         return $this;
     }
 
+    public function setCommand($command)
+    {
+        if ($command instanceof Algorithm) {
+            $this->algorithm = $command;
+            $command = $command->getName();
+        }
+
+        if (!$this->command
+            || $this->command != $command
+            || !$this->algorithm
+        ) {
+            $this->algorithm = $this->tm->getAlgorithm($command);
+        }
+
+        return parent::setCommand($command);
+    }
     /**
      * @return Profile
      */
@@ -85,20 +102,40 @@ class TaskInput extends Task
     }
 
     /**
-     * @return int
+     * @return UserAd
      */
-    public function getAdId()
+    public function getAd()
     {
-        return $this->ad_id;
+        return $this->ad;
     }
 
     /**
-     * @param int $ad_id
+     * @param UserAd|int
      * @return TaskInput
      */
-    public function setAdId($ad_id)
+    public function setAd($ad)
     {
-        $this->ad_id = $ad_id;
+        if (!$ad instanceof UserAd) {
+            $ads = $this->tm->getUserAds($this->getProfile(), [
+                'ad_id' => $ad
+            ]);
+            $ad = $ads[0]??null;
+        };
+
+        $this->ad = $ad;
+        return $this;
+    }
+    
+    public function setParams($params)
+    {
+        if (is_array($params) && $alg = $this->getAlgorithm()) {
+            $class = $alg->getInputClass();
+            $this->params = new $class;
+            $this->params->setAttrs($params);
+        } else {
+            $this->params = $params;
+        }
+        
         return $this;
     }
 

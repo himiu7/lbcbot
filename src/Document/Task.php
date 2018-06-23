@@ -8,6 +8,9 @@
 
 namespace App\Document;
 
+use App\Entity\AttrsInterface;
+use App\Entity\AttrsTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -17,6 +20,13 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class Task
 {
+    use AttrsTrait;
+
+    const STATUS_NEW = 'new';
+    const STATUS_ACTIVE = 'active';
+    const STATUS_WAIT = 'wait';
+    const STATUS_PAUSE = 'pause';
+    const STATUS_ERROR = 'error';
     /**
      * @MongoDB\Id()
      */
@@ -47,13 +57,19 @@ class Task
     /**
      * @var string
      * @MongoDB\Field(type="string")
+     * @MongoDB\Index()
      */
     protected $list_id;
     /**
-     * @var \DateTime
-     * @MongoDB\Field(type="date")
+     * @var \MongoTimestamp
+     * @MongoDB\Field(type="timestamp")
      */
     protected $last_start;
+    /**
+     * @var \MongoTimestamp
+     * @MongoDB\Field(type="timestamp")
+     */
+    protected $next_start;
     /**
      * @var int
      * @MongoDB\Field(type="int")
@@ -61,7 +77,7 @@ class Task
     protected $interval = 15;
     /**
      * @var AdTradeResult
-     * @MongoDB\ReferenceOne(targetDocument="AdTradeResult")
+     * @MongoDB\ReferenceOne(targetDocument="AdTradeResult", cascade={"persist","remove"})
      */
     protected $curr_result;
     /**
@@ -69,6 +85,29 @@ class Task
      * @MongoDB\Field(type="string")
      */
     protected $status;
+    /**
+     * @var AdTradeResult[]
+     * @MongoDB\ReferenceMany(targetDocument="AdTradeResult", cascade={"persist","remove"})
+     */
+    protected $results;
+    /**
+     * @var ApiProfile
+     * @MongoDB\EmbedOne(targetDocument="ApiProfile")
+     */
+    private $api;
+    /**
+     * @var Market
+     * @MongoDB\ReferenceOne(targetDocument="Market", cascade={"persist","remove"})
+     */
+    private $market;
+    /**
+     * Task constructor.
+     */
+    public function __construct()
+    {
+        $this->results = new ArrayCollection();
+    }
+
     /**
      * @return mixed
      */
@@ -118,7 +157,7 @@ class Task
     }
 
     /**
-     * @return mixed
+     * @return AttrsInterface
      */
     public function getParams()
     {
@@ -126,7 +165,7 @@ class Task
     }
 
     /**
-     * @param mixed $params
+     * @param AttrsInterface $params
      */
     public function setParams($params)
     {
@@ -166,24 +205,6 @@ class Task
     public function setListId($list_id)
     {
         $this->list_id = $list_id;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getLastStart()
-    {
-        return $this->last_start;
-    }
-
-    /**
-     * @param \DateTime $last_start
-     * @return Task
-     */
-    public function setLastStart($last_start)
-    {
-        $this->last_start = $last_start;
         return $this;
     }
 
@@ -238,6 +259,150 @@ class Task
     public function setInterval($interval)
     {
         $this->interval = $interval;
+        return $this;
+    }
+
+
+    /**
+     * @param string $status
+     * @return array
+     * @throws \Exception
+     */
+    public function getStatusTxt($status = null)
+    {
+        $statuses = [
+            self::STATUS_NEW => 'New',
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_PAUSE => 'Pause',
+            self::STATUS_ERROR => 'Error'
+        ];
+
+        if (!$status) {
+            return $statuses;
+        } elseif (!isset($statuses[$status])) {
+            throw new \Exception('Invalid status');
+        }
+        return $statuses[$status];
+    }
+
+    /**
+     * @return AdTradeResult[]|ArrayCollection
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    /**
+     * @param AdTradeResult[] $results
+     * @return Task
+     */
+    public function setResults($results)
+    {
+        $this->results = $results;
+        return $this;
+    }
+
+    /**
+     * @param AdTradeResult $result
+     * @return Task
+     */
+    public function addResult(AdTradeResult $result): self
+    {
+        if (!$this->results->contains($result)) {
+            $this->results->add($result);
+            $result->setTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param AdTradeResult $result
+     * @return Task
+     */
+    public function removeResult(AdTradeResult $result): self
+    {
+        if ($this->results->contains($result)) {
+            $this->results->removeElement($result);
+            // set the owning side to null (unless already changed)
+            if ($result->getTask() === $this) {
+                $result->setTask(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return \MongoTimestamp
+     */
+    public function getLastStart()
+    {
+        return $this->last_start;
+    }
+
+    /**
+     * @param \MongoTimestamp $last_start
+     * @return Task
+     */
+    public function setLastStart($last_start)
+    {
+        $this->last_start = $last_start;
+        return $this;
+    }
+
+    /**
+     * @return \MongoTimestamp
+     */
+    public function getNextStart()
+    {
+        return $this->next_start;
+    }
+
+    /**
+     * @param \MongoTimestamp $next_start
+     * @return Task
+     */
+    public function setNextStart($next_start)
+    {
+        $this->next_start = $next_start;
+        return $this;
+    }
+
+    /**
+     * @return ApiProfile
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
+
+    /**
+     * @param ApiProfile $api
+     * @return Task
+     */
+    public function setApi($api)
+    {
+        $this->api = $api;
+        return $this;
+    }
+
+    /**
+     * @return Market
+     */
+    public function getMarket()
+    {
+        return $this->market;
+    }
+
+    /**
+     * @param Market $market
+     * @return Task
+     */
+    public function setMarket($market)
+    {
+        $this->market = $market;
         return $this;
     }
 

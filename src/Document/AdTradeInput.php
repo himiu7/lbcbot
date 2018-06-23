@@ -8,9 +8,11 @@
 
 namespace App\Document;
 
+use App\Entity\Algorithm;
 use App\Entity\AttrsInterface;
 use App\Entity\AttrsTrait;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * Class AdBuyInput
@@ -20,6 +22,10 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class AdTradeInput implements AttrsInterface
 {
     use AttrsTrait;
+    /**
+     * @var Algorithm
+     */
+    private $algorithm;
     /**
      * @var integer
      * @MongoDB\Field(type="int")
@@ -64,4 +70,21 @@ class AdTradeInput implements AttrsInterface
         $this->price_step = $price_step;
     }
 
+    /**
+     * @return Algorithm
+     */
+    public function getAlgorithm()
+    {
+        return $this->algorithm;
+    }
+
+    /**
+     * @param Algorithm $algorithm
+     * @return AdTradeInput
+     */
+    public function setAlgorithm($algorithm)
+    {
+        $this->algorithm = $algorithm;
+        return $this;
+    }
 }

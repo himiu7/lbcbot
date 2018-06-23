@@ -4,7 +4,7 @@
  */
 $(document).ready(function(){
     var form = $('form[name="task_input"]'),
-        cmd = form.find('select#task_input_command');
+        cmd = form.find('select#task_input_algorithm');
     // Show Profile : 'create_task_alg'
     $('#btnCreateTask').click(function(){
         if (cmd.val() != '') {
@@ -49,6 +49,24 @@ $(document).ready(function(){
             });
 
             return false;
+        });
+    }
+    // Task show results rivals
+    var btnRivals = $('.btn-result-rivals');
+
+    if (btnRivals.length > 0) {
+        btnRivals.click(function(){
+            var re = /^btnResultRivals_(.+)$/,
+                id = re.exec($(this).attr('id')),
+                rivs = $('#divResultRivals_'+(id.length > 1 ? id[1] : ''));
+
+            if (rivs.length > 0) {
+                if (rivs.css('display') == 'none') {
+                    rivs.show();
+                } else {
+                    rivs.hide();
+                }
+            }
         });
     }
 });

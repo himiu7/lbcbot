@@ -93,7 +93,7 @@ class ProfileController extends Controller
             'profile' => $profile,
             'task' => $task,
             'form' => $form->createView(),
-            'ads' => print_r($this->tm->getUserAds($profile), true)
+            'ads' => $this->tm->getUserAds($profile)
         ]);
     }
 
@@ -126,7 +126,7 @@ class ProfileController extends Controller
             $profile = $this->em->getRepository(Profile::class)->find($profileId);
 
             return $this->render('profile\_ads-list.html.twig', [
-                    'ads' => $this->tm->getUserAds($profile),
+                    'ads' => $this->tm->getUserAds($profile, ['force' => true]),
                     'profile' => $profile
                 ]);
         }

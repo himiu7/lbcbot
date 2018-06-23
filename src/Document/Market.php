@@ -8,7 +8,7 @@
 
 namespace App\Document;
 
-use App\Document\Ad;
+use App\Document\TradeAd;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
@@ -30,13 +30,14 @@ class Market
      */
     protected $list_id;
     /**
+     * @var \MongoTimestamp
      * @MongoDB\Field(type="timestamp")
      */
     protected $last_update;
 
     /**
      * @var TradeAd[]
-     * @MongoDB\EmbedMany(targetDocument="Ad")
+     * @MongoDB\EmbedMany(targetDocument="TradeAd")
      */
     private $ads = [];
 
@@ -64,10 +65,12 @@ class Market
 
     /**
      * @param mixed $id
+     * @return Market
      */
     public function setId($id)
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -80,14 +83,16 @@ class Market
 
     /**
      * @param string $list_id
+     * @return Market
      */
     public function setListId($list_id)
     {
         $this->list_id = $list_id;
+        return $this;
     }
 
     /**
-     * @return int Timestamp
+     * @return \MongoTimestamp
      */
     public function getLastUpdate()
     {
@@ -95,15 +100,17 @@ class Market
     }
 
     /**
-     * @param integer $last_update Timestamp
+     * @param \MongoTimestamp $last_update
+     * @return Market
      */
     public function setLastUpdate($last_update)
     {
         $this->last_update = $last_update;
+        return $this;
     }
 
     /**
-     * @return TradeAd[]
+     * @return ArrayCollection|TradeAd[]
      */
     public function getAds()
     {
@@ -112,10 +119,12 @@ class Market
 
     /**
      * @param TradeAd[] $ads
+     * @return Market
      */
     public function setAds($ads)
     {
         $this->ads = $ads;
+        return $this;
     }
 
     /**
@@ -128,9 +137,12 @@ class Market
 
     /**
      * @param Trade $provider
+     * @return Market
      */
     public function setProvider($provider)
     {
         $this->provider = $provider;
+        return $this;
     }
+
 }

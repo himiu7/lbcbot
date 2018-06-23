@@ -75,18 +75,6 @@ class Ad extends TradeAd
     /**
      * @MongoDB\Field(type="string")
      */
-    protected $min_amount; //: string repr of a decimal or null,
-    /**
-     * @MongoDB\Field(type="string")
-     */
-    protected $max_amount; //: string repr of a decimal or null,
-    /**
-     * @MongoDB\Field(type="string")
-     */
-    protected $max_amount_available; //: string repr of a decimal or null,
-    /**
-     * @MongoDB\Field(type="string")
-     */
     protected $limit_to_fiat_amounts; //: protected "5,10,20",
     /**
      * @MongoDB\Field(type="boolean")
@@ -370,60 +358,6 @@ class Ad extends TradeAd
     public function setLon($lon)
     {
         $this->lon = $lon;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMinAmount()
-    {
-        return $this->min_amount;
-    }
-
-    /**
-     * @param mixed $min_amount
-     * @return Ad
-     */
-    public function setMinAmount($min_amount)
-    {
-        $this->min_amount = $min_amount;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMaxAmount()
-    {
-        return $this->max_amount;
-    }
-
-    /**
-     * @param mixed $max_amount
-     * @return Ad
-     */
-    public function setMaxAmount($max_amount)
-    {
-        $this->max_amount = $max_amount;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMaxAmountAvailable()
-    {
-        return $this->max_amount_available;
-    }
-
-    /**
-     * @param mixed $max_amount_available
-     * @return Ad
-     */
-    public function setMaxAmountAvailable($max_amount_available)
-    {
-        $this->max_amount_available = $max_amount_available;
         return $this;
     }
 

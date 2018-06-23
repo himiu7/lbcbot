@@ -8,6 +8,9 @@
 
 namespace App\DataFixtures\ORM;
 
+use App\Document\AdBuyInput;
+use App\Document\AdSellInput;
+use App\Document\AdTradeResult;
 use App\Entity\Algorithm;
 use App\Entity\AlgorithmParam;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,8 +23,8 @@ class Fixtures extends Fixture
         $algorithm = (new Algorithm())
             ->setName('lbc:sell-ad')
             ->setDescription('Продвижение объявлений на рынке продаж')
-            ->setInputClass('AdSellInput')
-            ->setResultClass('AdTradeResult');
+            ->setInputClass(AdSellInput::class)
+            ->setResultClass(AdTradeResult::class);
 
         $param = (new AlgorithmParam())
             ->setName('ad_id')
@@ -44,8 +47,8 @@ class Fixtures extends Fixture
         $algorithm = (new Algorithm())
             ->setName('lbc:buy-ad')
             ->setDescription('Продвижение объявлений на рынке покупок')
-            ->setInputClass('AdBuyInput')
-            ->setResultClass('AdTradeResult');
+            ->setInputClass(AdBuyInput::class)
+            ->setResultClass(AdTradeResult::class);
 
         $param = (new AlgorithmParam())
             ->setName('ad_id')

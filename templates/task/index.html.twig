@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task index{% endblock %}
+
+{% block body %}
+<div class="blog-header">
+    <h1 class="blog-title">Список задач</h1>
+    <p class="lead blog-description">Профайл: {{ profile.title|e }}</p>
+</div>
+
+<div class="row">
+    {% include '_alert.html.twig' %}
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <a type="button" href="{{ path('create_task', {'profile_id':profile.id}) }}" class="btn btn-primary pull-right">Создать таск</a>
+    </div>
+
+    <div class="col-sm-12 blog-main">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Команда</th>
+                    <th>Статус</th>
+                    <th>Последний запуск</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title|e }}</td>
+                    <td>{{ task.command|e }}</td>
+                    <td>{{ task.statusTxt(task.status)|e }}</td>
+                    <td>{{ task.lastStart ? task.lastStart|date('Y-m-d H:i:s') : '-' }}</td>
+                    <td>
+                        <a href="{{ path('task_show', {'id': profile.id}) }}"><i class="glyphicon glyphicon-search"></i></a>
+                        {% include '_delete_form.html.twig' with {'entity':'task', 'entity_id': task.id} %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Ничего найдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -61,7 +61,6 @@ return [
                 ]
             ]
         ],
-        
         "onlineBuy"=> [
             "httpMethod"=> "GET",
             "uri"=> "/buy-bitcoins-online/.json",

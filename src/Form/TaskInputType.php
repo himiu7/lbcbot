@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Document\UserAd;
 use App\Entity\Algorithm;
-use App\Entity\AlgorithmParam;
 use App\Model\TaskInput;
 use App\Service\TaskManager;
 use Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType;
@@ -18,6 +17,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use App\Form\TaskParamsType;
 
 class TaskInputType extends AbstractType
 {
@@ -59,11 +59,12 @@ class TaskInputType extends AbstractType
                 ]
             )
             ->add(
-                'command',
+                'algorithm',
                 EntityType::class,
                 [
                     'constraints' => [new NotBlank()],
                     'placeholder' => '-- Алгоритм --',
+                    //'required' => false,
                     'class' => Algorithm::class,
                     'choice_value' => 'name',
                     'choice_label' => function (Algorithm $alg) {
@@ -72,10 +73,6 @@ class TaskInputType extends AbstractType
                     'attr' => ['class' => 'form-control task-command'],
                     'label' => 'Алгоритм'
                 ]
-            )
-            ->add(
-                'params',
-                FormType::class
             );
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($builder){
@@ -89,7 +86,7 @@ class TaskInputType extends AbstractType
                 if ($profile = $task->getProfile()) {
 
                     $form->add(
-                        'ad_id',
+                        'ad',
                         DocumentType::class,
                         [
                             'class' => UserAd::class,
@@ -120,33 +117,15 @@ class TaskInputType extends AbstractType
                 $alg = $task->getAlgorithm();
 
                 if ($alg) {
-                    /** @var FormBuilderInterface $paramsForm */
-                    $paramsForm = $builder->create(
+
+                    $form->add(
                         'params',
-                        FormType::class,
+                        TaskParamsType::class,
                         [
-                            'auto_initialize' => false
+                            'data_class' => $alg->getInputClass(),
+                            'algorithm' => $alg
                         ]
                     );
-
-                    /** @var AlgorithmParam $param */
-                    foreach ($alg->getParams() as $param) {
-                        // todo Refactore to exclude params
-                        if ($param->getName() == 'ad_id') {
-                            continue;
-                        }
-                        $paramsForm->add(
-                            $param->getName(),
-                            TextType::class,
-                            [
-                                //'constraints' => [new NotBlank()],
-                                'attr' => ['class' => 'form-control'],
-                                'label' => $param->getTitle()
-                            ]
-                        );
-                    }
-
-                    $form->add($paramsForm->getForm());
                 }
             }
         });
@@ -155,7 +134,9 @@ class TaskInputType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data-class' => TaskInput::class
+            'data-class' => TaskInput::class,
+            'allow_extra_fields' => true,
+			'csrf_protection' => false
         ]);
     }
 

@@ -28,7 +28,7 @@ trait AttrsTrait
     {
         foreach ($attrs as $field => $value) {
 
-            if (!empty($embed[$field])) {
+            if (!empty($embed[$field]) && is_array($attrs[$field])) {
                 $this->$field = new $embed[$field];
                 $this->$field->setAttrs($value, $embed);
             } else {
@@ -51,7 +51,7 @@ trait AttrsTrait
         if (!empty($attr)) {
             if (is_array($attr)) {
 
-                foreach ($attr as $field => $value) {
+                foreach ($attr as $field) {
                     $result[$field] = $this->$field;
                 }
             } else {
@@ -59,8 +59,8 @@ trait AttrsTrait
             }
         } else {
 
-            foreach (get_object_vars($this) as $attr) {
-                $result[$attr] = $this->$attr;
+            foreach (get_object_vars($this) as $attr => $val) {
+                $result[$attr] = $val;
             }
         }
 

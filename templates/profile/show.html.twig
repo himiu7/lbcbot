@@ -37,9 +37,10 @@
             </table>
             <div class="row">
                 <div class="col-sm-12 center-block text-center">
-                    <a class="btn btn-primary" href="{{  path('profile_index') }}">back to list</a>
-                    <a class="btn btn-primary" href="{{ path('profile_edit', {'id': profile.id}) }}">edit</a>
-                    <a class="btn btn-default" id="btnUpdateAds" href="#userAds" dataUrl="{{ path('profile_update_ads', {'id': profile.id}) }}">update ads</a>
+                    <a class="btn btn-primary" href="{{  path('profile_index') }}">Список профайлов</a>
+                    <a class="btn btn-primary" href="{{ path('profile_edit', {'id': profile.id}) }}">Изменить</a>
+                    <a class="btn btn-default" id="btnUpdateAds" href="#userAds" dataUrl="{{ path('profile_update_ads', {'id': profile.id}) }}">Обновить объявления</a>
+                    <a class="btn btn-default" href="{{ path('task_index', {'profile_id': profile.id}) }}">Список задач</a>
                 </div>
             </div>
         </div>

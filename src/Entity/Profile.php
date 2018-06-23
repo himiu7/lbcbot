@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Api\LbcBundle\ApiProfileInterface;
 
 /**
  * Profile
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`profile`", indexes={@ORM\Index(name="user_id", columns={"user_id"})})
  * @ORM\Entity
  */
-class Profile
+class Profile implements ApiProfileInterface
 {
     /**
      * @var int
@@ -65,7 +66,7 @@ class Profile
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="profiles")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * })
@@ -118,7 +119,7 @@ class Profile
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -164,10 +165,10 @@ class Profile
     }
 
     /**
-     * @param \DateTimeInterface $lastAdsUpdate
+     * @param \DateTime $lastAdsUpdate
      * @return $this
      */
-    public function setLastAdsUpdate(\DateTimeInterface $lastAdsUpdate)
+    public function setLastAdsUpdate(\DateTime $lastAdsUpdate)
     {
         $this->lastAdsUpdate = $lastAdsUpdate;
 

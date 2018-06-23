@@ -9,7 +9,7 @@
 {% if short is defined and short %}
     <div class="col-md-12">
         <div class="form-group col-md-8">
-            {{ form_widget(form.command) }}
+            {{ form_widget(form.algorithm) }}
         </div>
         <div class="form-group col-md-4">
             <button class="form-control btn-primary pull-right" id="btnCreateTask" type="button">Создать таск</button>
@@ -24,10 +24,10 @@
             {{ form_row(form.interval) }}
         </div>
         <div class="form-group col-md-6">
-            {{ form_row(form.command) }}
+            {{ form_row(form.algorithm) }}
         </div>
         <div class="form-group col-md-6">
-            {{ form_row(form.ad_id) }}
+            {{ form_row(form.ad) }}
         </div>
         <div class="form-group col-md-12" id="taskParams">
             {% include 'task/_form-params.html.twig' %}

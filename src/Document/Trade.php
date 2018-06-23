@@ -17,6 +17,9 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class Trade
 {
+    const TRADE_USER = 'user';
+    const TRADE_SELL = 'sell';
+    const TRADE_BUY = 'buy';
     /**
      * @var string
      * @MongoDB\Field(type="string")
@@ -28,6 +31,12 @@ class Trade
      * @MongoDB\Field(type="string")
      */
     private $country;
+
+    /**
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
+    private $countrycode;
 
     /**
      * @var string
@@ -50,6 +59,7 @@ class Trade
             strtolower(
                   $this->type
                   . $this->country
+                  . $this->countrycode
                   . $this->currency
                   . $this->page
             ));
@@ -65,10 +75,12 @@ class Trade
 
     /**
      * @param string $type
+     * @return Trade
      */
     public function setType($type)
     {
         $this->type = $type;
+        return $this;
     }
 
     /**
@@ -81,10 +93,12 @@ class Trade
 
     /**
      * @param string $country
+     * @return Trade
      */
     public function setCountry($country)
     {
         $this->country = $country;
+        return $this;
     }
 
     /**
@@ -97,10 +111,12 @@ class Trade
 
     /**
      * @param string $currency
+     * @return Trade
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+        return $this;
     }
 
     /**
@@ -113,10 +129,31 @@ class Trade
 
     /**
      * @param int $page
+     * @return Trade
      */
     public function setPage($page)
     {
         $this->page = $page;
+        return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getCountrycode()
+    {
+        return $this->countrycode;
+    }
+
+    /**
+     * @param string $countrycode
+     * @return Trade
+     */
+    public function setCountrycode($countrycode)
+    {
+        $this->countrycode = $countrycode;
+        return $this;
+    }
+
 
 }

@@ -142,14 +142,18 @@ class LbcBuyAdCommand extends LbcTaskCommand
                 $prevResult = $task->getCurrResult();
 
                 $result->setTmpPrice($userAd->getTempPrice());
+                $koef = $result->parseEquation($userAd->getPriceEquation());
 
                 if (!$prevResult) {
-                    $koef = $result->parseEquation($userAd->getPriceEquation());
                     $result->setChange(0);
                 } else {
-                    $koef = $prevResult->getKoef();
                     $result->setChange($result->getTmpPrice() - $prevResult->getTmpPrice());
                 }
+                dump([
+                    'Eq' => $koef,
+                    'Limit' => $params->getMaxPriceLimit(),
+                    'Price' => $userAd->getTempPrice()
+                ]);
 
                 if ($koef) {
                     // TODO extend 'stop' Conditions
@@ -159,9 +163,8 @@ class LbcBuyAdCommand extends LbcTaskCommand
                         $koef += $params->getPriceStep();
                         $result->setKoef($koef);
 
-                        $io->note("* Update equation: {$koef}*");
                         $this->tm->changeEquation($api, $params->getAdId(), $koef);
-
+                        $io->note("* Update Equition: {$koef} *");
                         // TODO test if the User Ads update required (add OPTION --update)
                         if ($input->getOption('update')) {
                             $this->tm->refreshUserAds($api, $lastUpdate);

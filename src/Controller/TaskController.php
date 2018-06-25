@@ -64,14 +64,9 @@ class TaskController extends Controller
     public function results(Request $request): Response
     {
         $taskId = $request->get('id');
-        $qb = $this->dm->createQueryBuilder(Task::class);
         /** @var Task $task */
-        $task = $qb
-            ->select('command')
-            ->field('id')->equals($taskId)
-            ->getQuery()
-            ->getSingleResult()
-        ;
+        $task = $this->dm->getRepository(Task::class)
+            ->find($taskId);
 
         if (!$task) {
             throw new DocumentNotFoundException();
@@ -96,7 +91,8 @@ class TaskController extends Controller
             }*/
         });
 
-        $task = $this->dm->getRepository(Task::class)->find($taskId);
+        $task = $this->dm->getRepository(Task::class)
+            ->find($taskId);
 
         return $this->render('task/_results.html.twig', [
             'results' => $task->getResults()

@@ -28,7 +28,7 @@ class AdBuyInput extends AdTradeInput
      */
     public function getMaxPriceLimit()
     {
-        return $this->max_price_limit;
+        return (float)$this->max_price_limit;
     }
 
     /**

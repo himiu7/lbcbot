@@ -247,12 +247,17 @@ class AdTradeResult
         return $this;
     }
 
+    /**
+     * @param string $equation
+     * @return bool|float
+     */
     public function parseEquation(string $equation)
     {
         if (preg_match('/^btc_in_usd\*USD_in_UAH\*(\d+\.\d+)$/i', $equation, $parts)) {
+
             $this->setKoef($parts[1]);
 
-            return $parts[1];
+            return (float)$parts[1];
         }
 
         return false;

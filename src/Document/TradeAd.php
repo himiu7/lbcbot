@@ -103,38 +103,38 @@ class TradeAd implements AttrsInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getTempPriceUsd()
     {
-        return $this->temp_price_usd;
+        return (float)$this->temp_price_usd;
     }
 
     /**
-     * @param mixed $temp_price_usd
+     * @param float $temp_price_usd
      * @return TradeAd
      */
     public function setTempPriceUsd($temp_price_usd)
     {
-        $this->temp_price_usd = $temp_price_usd;
+        $this->temp_price_usd = (float)$temp_price_usd;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getTempPrice()
     {
-        return $this->temp_price;
+        return (float)$this->temp_price;
     }
 
     /**
-     * @param mixed $temp_price
+     * @param float $temp_price
      * @return TradeAd
      */
     public function setTempPrice($temp_price)
     {
-        $this->temp_price = $temp_price;
+        $this->temp_price = (float)$temp_price;
         return $this;
     }
 

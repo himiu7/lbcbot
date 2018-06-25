@@ -22,7 +22,7 @@
                     <td>{{ task.command|e }}</td>
                 </tr>
                 <tr>
-                    <th><a name="taskStatus">Статус</th>
+                    <th><a name="taskStatus"></a>Статус</th>
                     <td id="taskStatus">{{ task.statusTxt(task.status)|e }}</td>
                 </tr>
                 <tr>
@@ -44,8 +44,8 @@
             <div class="row">
                 <div class="col-sm-12 center-block text-center">
                     <a class="btn btn-primary" href="{{  path('task_index', {'profile_id':task.profile.id}) }}">Список задач</a>
+                    <a class="btn btn-task-{{ task.status }}" id="btnTaskStatus" href="#taskStatus" dataUrl="{{ path('task_status', {'id': task.id}) }}">Запустить</a>
                     <a class="btn btn-default" id="btnTaskResults" href="#taskResults" dataUrl="{{ path('task_results', {'id': task.id}) }}">Обновить результаты</a>
-                    <a class="btn btn-danger" id="btnTaskStatus" href="#taskStatus" dataUrl="{{ path('task_status', {'id': task.id}) }}">Запустить</a>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
 </div>
 <div class="row">
     <a name="userAds"></a>
-    <div class="col-sm-12" id="listUserAds">
+    <div class="col-sm-12" id="listResults">
         {% include 'task/_results.html.twig' with {'results': results } %}
     </div>
 </div>

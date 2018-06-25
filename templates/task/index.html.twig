@@ -9,9 +9,9 @@
 </div>
 
 <div class="row">
-    {% include '_alert.html.twig' %}
     <div class="col-md-12 col-lg-12 col-xl-12">
         <a type="button" href="{{ path('create_task', {'profile_id':profile.id}) }}" class="btn btn-primary pull-right">Создать таск</a>
+        <a type="button" href="{{ path('profile_show', {'id':profile.id}) }}" class="btn btn-default pull-right">К профайлу</a>
     </div>
 
     <div class="col-sm-12 blog-main">
@@ -33,13 +33,12 @@
                     <td>{{ task.statusTxt(task.status)|e }}</td>
                     <td>{{ task.lastStart ? task.lastStart|date('Y-m-d H:i:s') : '-' }}</td>
                     <td>
-                        <a href="{{ path('task_show', {'id': profile.id}) }}"><i class="glyphicon glyphicon-search"></i></a>
-                        {% include '_delete_form.html.twig' with {'entity':'task', 'entity_id': task.id} %}
+                        <a href="{{ path('task_show', {'id': task.id}) }}"><i class="glyphicon glyphicon-search"></i></a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6">Ничего найдено</td>
+                    <td colspan="5">Ничего найдено</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -136,16 +136,19 @@ class TaskManager
             'secret' => $profile->getSecret()
         ]);
 
-        try {
-            $api->adUpdateEquation([
-                'ad_id' => $adId,
-                'price_equation' => sprintf("btc_in_usd*USD_in_UAH*%f", $koef)
-            ]);
-        } catch (RequestException $e) {
-            return false;
-        }
+        //try {
+        $res = $api->adUpdateEquation([
+            'ad_id' => $adId,
+            'price_equation' => sprintf("btc_in_usd*USD_in_UAH*%f", $koef)
+        ]);
 
-        return true;
+        dump($res);
+
+        //} catch (RequestException $e) {
+          //  return false;
+        //}
+
+        //return true;
     }
     /**
      * @param Profile $profile

@@ -9,10 +9,13 @@ use App\Form\TaskInputType;
 use App\Model\TaskInput;
 use App\Service\TaskManager;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\DocumentNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Profile;
 
 /**
  * @Route("/task")
@@ -42,24 +45,62 @@ class TaskController extends Controller
     /**
      * @Route("/{profile_id}", name="task_index", methods="GET", requirements={"profile_id"="\d+"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        /*$profiles = $this->getDoctrine()
-            ->getRepository(Task::class)
-            ->findAll();
+        $profileId = intval($request->get('profile_id'));
 
-        return $this->render('task/index.html.twig', ['profiles' => $profiles]);*/
+        $tasks = $this->dm->getRepository(Task::class)->findBy(['profile_id'=>$profileId]);
+
+        $profile = $this->getDoctrine()->getRepository(Profile::class)->find($profileId);
+
+        return $this->render('task/index.html.twig', [
+            'tasks' => $tasks,
+            'profile' => $profile
+        ]);
     }
     /**
      * @Route("/{id}/results", name="task_results", methods="GET")
      */
-    public function results(): Response
+    public function results(Request $request): Response
     {
-        /*$profiles = $this->getDoctrine()
-            ->getRepository(Task::class)
-            ->findAll();
+        $taskId = $request->get('id');
+        $qb = $this->dm->createQueryBuilder(Task::class);
+        /** @var Task $task */
+        $task = $qb
+            ->select('command')
+            ->field('id')->equals($taskId)
+            ->getQuery()
+            ->getSingleResult()
+        ;
 
-        return $this->render('task/index.html.twig', ['profiles' => $profiles]);*/
+        if (!$task) {
+            throw new DocumentNotFoundException();
+        }
+
+        $sh = preg_replace('#(src/.+)$#', 'bin/console', dirname(__FILE__));
+        // Execute task
+        /** @var Process $proc */
+        $proc = new Process([
+            $sh,
+            $task->getCommand(),
+            $taskId
+        ]);
+
+        $proc->start();
+
+        $proc->wait(function ($type, $buffer) {
+   /*         if (Process::ERR === $type) {
+                echo 'ERR > '.$buffer;
+            } else {
+                echo 'OUT > '.$buffer;
+            }*/
+        });
+
+        $task = $this->dm->getRepository(Task::class)->find($taskId);
+
+        return $this->render('task/_results.html.twig', [
+            'results' => $task->getResults()
+        ]);
     }
     /**
      * @Route("/{id}/status", name="task_status", methods="POST")
@@ -67,11 +108,8 @@ class TaskController extends Controller
     public function status(): Response
     {
         // TODO: Start / Stop Task
-        /*$profiles = $this->getDoctrine()
-            ->getRepository(Task::class)
-            ->findAll();
 
-        return $this->render('task/index.html.twig', ['profiles' => $profiles]);*/
+        return new Response('NOT IMPLEMENTED');
     }
     /**
      * @Route("/{id}", name="task_show", methods="GET")

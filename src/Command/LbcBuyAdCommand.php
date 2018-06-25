@@ -37,7 +37,7 @@ class LbcBuyAdCommand extends LbcTaskCommand
 
         if (!$id) {
             $io->error('ID is required');
-            return;
+            return 1;
         }
 
         /** @var Task $task */
@@ -45,8 +45,19 @@ class LbcBuyAdCommand extends LbcTaskCommand
             ->find($id);
         if (!$task) {
             $io->error(sprintf("Task #< %s ># Not Found", $id));
-            return;
+            return 2;
         }
+
+        if ($next = $task->getNextStart()) {
+            $delay = $next->sec - time();
+
+            if ($delay > 0) {
+                $io->note("* Delay on #< {$delay} ># secs *");
+                sleep($delay);
+            }
+        }
+
+        $lastUpdate = new \MongoTimestamp(time() - $task->getInterval());
 
         $task
             ->setStatus(Task::STATUS_ACTIVE)
@@ -74,9 +85,6 @@ class LbcBuyAdCommand extends LbcTaskCommand
                 throw new LbcTaskException('Market is not linked or empty');
             }
 
-            $now = time();
-            $lastUpdate = new \MongoTimestamp($now - $task->getInterval());
-
             // update market
             if ($market->getLastUpdate()->sec < $lastUpdate->sec) {
                 // TODO uncommenet
@@ -84,7 +92,7 @@ class LbcBuyAdCommand extends LbcTaskCommand
                 $this->dm->persist($market);
                 $task->setMarket($market);*/
 
-                $io->note(date('M,j h:m:s', $lastUpdate->sec));
+                $io->note('* Market Ads *');
             }
 
             // update user ads
@@ -121,6 +129,7 @@ class LbcBuyAdCommand extends LbcTaskCommand
                 $result->setRivals($market->getAds()->slice($_pos, $_len));
                 // position
                 $pos += $ad->key();
+                $io->note("* Position: {$pos} *");
                 $result->setPosition($pos);
                 /** @var UserAd $userAd */
                 $userAd = $this->dm->getRepository(UserAd::class)
@@ -149,7 +158,10 @@ class LbcBuyAdCommand extends LbcTaskCommand
                     ) {
                         $koef += $params->getPriceStep();
                         $result->setKoef($koef);
+
+                        $io->note("* Update equation: {$koef}*");
                         $this->tm->changeEquation($api, $params->getAdId(), $koef);
+
                         // TODO test if the User Ads update required (add OPTION --update)
                         if ($input->getOption('update')) {
                             $this->tm->refreshUserAds($api, $lastUpdate);
@@ -187,7 +199,7 @@ class LbcBuyAdCommand extends LbcTaskCommand
             $this->dm->flush();
 
             $io->error($e->getMessage());
-            return;
+            return 3;
         }
 
         $io->success('Ok');

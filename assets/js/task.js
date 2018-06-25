@@ -39,7 +39,7 @@ $(document).ready(function(){
             userAds.html('Updating...');
 
             console.log($(this).attr('dataUrl'));
-
+            return;
             $.get({
                 url: $(this).attr('dataUrl'),
                 success: function(data) {
@@ -67,6 +67,23 @@ $(document).ready(function(){
                     rivs.hide();
                 }
             }
+        });
+    }
+    // Task update results
+    //
+    var btnTaskResults = $('#btnTaskResults');
+
+    if (btnTaskResults.length > 0) {
+        btnTaskResults.click(function () {
+            var url = btnTaskResults.attr('dataUrl');
+
+            console.log(url);
+
+            $('#listResults').html('Loading...');
+
+            $.get(url, {}, function(data){
+                $('#listResults').html(data);
+            });
         });
     }
 });

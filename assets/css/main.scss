@@ -160,11 +160,26 @@ h6, .h6 {
 
 .btn-default {
   background-color: #ffa500;
+  color: #f0f0f0;
 }
 
 /* Alerts */
 .bg-error {
   background-color: darkred;
   border-radius: 5px;
-  color: white;
+  color: #f0f0f0;
+}
+
+/* Task */
+.btn-task-error,
+.btn-task-wait,
+.btn-task-new,
+.btn-task-pause {
+  background-color: #00aa00;
+  color: #f0f0f0;
+}
+
+.btn-task-active {
+  background-color: #aa0000;
+  color: #f0f0f0;
 }

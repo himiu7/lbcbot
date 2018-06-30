@@ -87,10 +87,10 @@ class LbcBuyAdCommand extends LbcTaskCommand
 
             // update market
             if ($market->getLastUpdate()->sec < $lastUpdate->sec) {
-                // TODO uncommenet
-                /*$market = $this->tm->updateTrade($market->getProvider());
+                
+                $market = $this->tm->updateTrade($market->getProvider());
                 $this->dm->persist($market);
-                $task->setMarket($market);*/
+                $task->setMarket($market);
 
                 $io->note('* Market Ads *');
             }

@@ -6,7 +6,7 @@
 return [
     "name"=> "LocalBtc",
     "apiVersion"=> "2013-10-15",
-    "baseUrl"=> "https=>//localbitcoins.com",
+    "baseUrl"=> "https://localbitcoins.com",
     "description"=> "An API to access LocalBitcoins.com",
     "operations"=> [
         "accountInfo"=> [
